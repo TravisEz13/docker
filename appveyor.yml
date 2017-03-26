@@ -1,0 +1,27 @@
+#---------------------------------# 
+#      environment configuration  # 
+#---------------------------------# 
+version: 2.5.{build}.0
+image: Visual Studio 2017
+install:
+    - ps: docker -v
+
+#---------------------------------# 
+#      build configuration        # 
+#---------------------------------# 
+
+build: false
+
+#---------------------------------# 
+#      test configuration         # 
+#---------------------------------# 
+
+test_script:
+    - ps: docker build -t travisez13/docker:windowsservercore_git ./microsoft/windowsservercore/git
+
+#---------------------------------# 
+#      deployment configuration   # 
+#---------------------------------# 
+
+# scripts to run before deployment 
+deploy_script: false
