@@ -24,4 +24,12 @@ test_script:
 #---------------------------------# 
 
 # scripts to run before deployment 
-deploy_script: false
+deploy_script:
+    - ps: |
+        if($env:docker_user -and $env:docker_password)
+        {
+            docker login --username $env:docker_user --password $env:docker_password
+            docker push travisez13/docker:windowsservercore_git
+        }
+        docker save travisez13/docker:windowsservercore_git > travisez13_docker_windowsservercore_git.tgz
+        push-appveyorartifact travisez13_docker_windowsservercore_git.tgz
