@@ -1,0 +1,5 @@
+FROM microsoft/windowsservercore
+
+SHELL ["powershell"]
+RUN Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
+RUN choco install -y git
