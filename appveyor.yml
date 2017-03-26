@@ -1,7 +1,7 @@
 #---------------------------------# 
 #      environment configuration  # 
 #---------------------------------# 
-version: 2.5.{build}.0
+version: 0.1.{build}.0
 image: Visual Studio 2017
 install:
     - ps: docker -v
@@ -17,7 +17,8 @@ build: false
 #---------------------------------# 
 
 test_script:
-    - ps: docker build -t travisez13/docker:windowsservercore_git ./microsoft/windowsservercore/git
+    - ps: docker build -t travisez13/microsoft.windowsservercore.git:latest ./microsoft/windowsservercore/git
+    - ps: docker build -t "travisez13/microsoft.windowsservercore.git:$env:APPVEYOR_BUILD_VERSION" ./microsoft/windowsservercore/git
 
 #---------------------------------# 
 #      deployment configuration   # 
@@ -29,7 +30,6 @@ deploy_script:
         if($env:docker_user -and $env:docker_password)
         {
             docker login --username $env:docker_user --password $env:docker_password
-            docker push travisez13/docker:windowsservercore_git
+            docker push "travisez13/microsoft.windowsservercore.git:$env:APPVEYOR_BUILD_VERSION"
+            docker push travisez13/microsoft.windowsservercore.git:latest
         }
-        docker save travisez13/docker:windowsservercore_git > travisez13_docker_windowsservercore_git.tgz
-        push-appveyorartifact travisez13_docker_windowsservercore_git.tgz
