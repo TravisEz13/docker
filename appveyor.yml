@@ -19,6 +19,16 @@ build: false
 test_script:
     - ps: docker build -t travisez13/microsoft.windowsservercore.git:latest ./microsoft/windowsservercore/git
     - ps: docker build -t "travisez13/microsoft.windowsservercore.git:$env:APPVEYOR_BUILD_VERSION" ./microsoft/windowsservercore/git
+    - ps: docker build -t "travisez13/microsoft.windowsservercore.git:$env:APPVEYOR_BUILD_VERSION" ./microsoft/windowsservercore/git
+    - ps: |
+        Describe "travisez13/microsoft.windowsservercore.git:latest" {
+            it "should contain git" {
+                [System.Diagnostics.Process] $process = start-process -Wait -filepath docker -argumentlist @('run', 'travisez13/microsoft.windowsservercore.git:latest', 'git', 'version') -PassThru  -RedirectStandardError Testdrive:\stderr.txt -RedirectStandardOutput testdrive:\stdout.txt 
+                Get-Content testdrive:\stderr.txt | should benullorempty
+                Get-Content testdrive:\stdout.txt | should belike 'git version *.windows.*'
+            }
+        }
+
 
 #---------------------------------# 
 #      deployment configuration   # 

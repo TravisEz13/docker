@@ -5,4 +5,4 @@ LABEL Description="This Dockerfile for Windows Server Core with git installed vi
 
 SHELL ["powershell"]
 RUN Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
-RUN choco install -y git; Remove-Item -recurse -force $env:temp\*
+RUN choco install -y git
