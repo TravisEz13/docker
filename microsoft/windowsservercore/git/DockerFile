@@ -1,7 +1,7 @@
 FROM microsoft/windowsservercore
 LABEL maintainer='Travis Plunk <github@ez13.net>'
-LABEL Readme.md="https://github.com/TravisEz13/docker/blob/master/readme.md"
-LABEL Description="This Dockerfile for Windows Server Core with git installed via chocolatey."
+LABEL Readme.md="https://github.com/TravisEz13/docker/blob/master/microsoft/windowsservercore/git/readme.md"
+LABEL Description="This Dockerfile for Windows Server Core with git installed via chocolatey.  See readme on docker hub for licensing."
 
 SHELL ["powershell"]
 RUN Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
