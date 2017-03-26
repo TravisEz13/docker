@@ -1,5 +1,8 @@
 FROM microsoft/windowsservercore
+LABEL maintainer='Travis Plunk <github@ez13.net>'
+LABEL Readme.md="https://github.com/TravisEz13/docker/blob/master/readme.md"
+LABEL Description="This Dockerfile for Windows Server Core with git installed via chocolatey."
 
 SHELL ["powershell"]
 RUN Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
-RUN choco install -y git
+RUN choco install -y git; Remove-Item -recurse -force $env:temp\*
