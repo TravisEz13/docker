@@ -1,10 +1,10 @@
-        Describe "travisez13/microsoft.windowsservercore.git:latest" {
+        Describe "nuget" {
             $repos = @(
                 @{repo = 'travisez13/microsoft.windowsservercore.git_and_nuget'}
             )
 
-            it "should contain git" -TestCases $repos {
-                params(
+            it "<repo> should contain nuget" -TestCases $repos {
+                param(
                     [parameter(Mandatory)]
                     [string]$repo
                 )
