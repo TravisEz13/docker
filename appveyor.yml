@@ -17,18 +17,37 @@ build: false
 #---------------------------------# 
 
 test_script:
-    - ps: docker build -t travisez13/microsoft.windowsservercore.git:latest ./microsoft/windowsservercore/git
-    - ps: docker build -t "travisez13/microsoft.windowsservercore.git:$env:APPVEYOR_BUILD_VERSION" ./microsoft/windowsservercore/git
-    - ps: docker build -t "travisez13/microsoft.windowsservercore.git:$env:APPVEYOR_BUILD_VERSION" ./microsoft/windowsservercore/git
     - ps: |
-        Describe "travisez13/microsoft.windowsservercore.git:latest" {
-            it "should contain git" {
-                [System.Diagnostics.Process] $process = start-process -Wait -filepath docker -argumentlist @('run', 'travisez13/microsoft.windowsservercore.git:latest', 'git', 'version') -PassThru  -RedirectStandardError Testdrive:\stderr.txt -RedirectStandardOutput testdrive:\stdout.txt 
-                Get-Content testdrive:\stderr.txt | should benullorempty
-                Get-Content testdrive:\stdout.txt | should belike 'git version *.windows.*'
-            }
+        $inventory = Get-Content .\inventory.json | convertfrom-json
+        foreach($dockerfile in $inventory)
+        {
+            docker build -t "$($dockerfile.repo):latest" $dockerfile.path
+            docker build -t "$($dockerfile.repo):$env:APPVEYOR_BUILD_VERSION" $dockerfile.path
         }
+    - ps: |
+        $results = Invoke-Pester -PassThru
+        foreach($result in $results.TestResult)
+        {
+            [string] $describeName = $result.Describe -replace '\\', '/'
+            [string] $contextName = $result.Context -replace '\\', '/'
+            $componentName = '{0}; Context: {1}' -f $describeName, $contextName
+            $appVeyorResult = $result.Result
+            # Convert any result not know by AppVeyor to an AppVeyor Result
+            switch($result.Result)
+            {
+                'Pending'
+                {
+                    $appVeyorResult = 'Skipped'
+                }
+            }
 
+            Add-AppveyorTest `
+                -Name $result.Name `
+                -Framework NUnit `
+                -Filename $componentName `
+                -Outcome $appVeyorResult `
+                -Duration $result.Time.TotalMilliseconds
+        }
 
 #---------------------------------# 
 #      deployment configuration   # 
@@ -40,6 +59,11 @@ deploy_script:
         if($env:docker_user -and $env:docker_password)
         {
             docker login --username $env:docker_user --password $env:docker_password
-            docker push "travisez13/microsoft.windowsservercore.git:$env:APPVEYOR_BUILD_VERSION"
-            docker push travisez13/microsoft.windowsservercore.git:latest
+
+            $inventory = Get-Content .\inventory.json | convertfrom-json
+            foreach($dockerfile in $inventory)
+            {
+                docker push "$($dockerfile.repo):$env:APPVEYOR_BUILD_VERSION"
+                docker push "$($dockerfile.repo):latest"
+            }
         }
