@@ -40,13 +40,16 @@ test_script:
                     $appVeyorResult = 'Skipped'
                 }
             }
-
             Add-AppveyorTest `
                 -Name $result.Name `
                 -Framework NUnit `
                 -Filename $componentName `
                 -Outcome $appVeyorResult `
                 -Duration $result.Time.TotalMilliseconds
+        }
+        if ($results.FailedCount -gt 0 -or $results.PassedCount -eq 0)
+        {
+            throw "$($results.FailedCount) tests failed."
         }
 
 #---------------------------------# 
