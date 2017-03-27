@@ -22,7 +22,15 @@ test_script:
         foreach($dockerfile in $inventory)
         {
             docker build -t "$($dockerfile.repo):latest" $dockerfile.path
+            if($LASTEXITCODE -ne 0)
+            {
+                throw "docker build of $($dockerfile.repo):latest failed"
+            }
             docker build -t "$($dockerfile.repo):$env:APPVEYOR_BUILD_VERSION" $dockerfile.path
+            if($LASTEXITCODE -ne 0)
+            {
+                throw "docker build of $($dockerfile.repo):<version> failed"
+            }
         }
     - ps: |
         $results = Invoke-Pester -PassThru
