@@ -7,3 +7,5 @@ RUN zypper --non-interactive update --skip-interactive \
     && zypper --non-interactive install \
         git \
     && zypper --non-interactive clean --all 
+
+ENTRYPOINT [ "bash" ]
