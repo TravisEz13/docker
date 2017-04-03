@@ -1,10 +1,6 @@
-# Windows Server Core with Git
+# OpenSUSE 42.1 with Git
 
-This a [Windows Server Core](https://hub.docker.com/r/microsoft/windowsservercore/) image with Git install using Chocolatey.
+This an [OpenSUSE](https://hub.docker.com/r/opensuse) 42.1 image with Git.
 
-Please see the [Windows Server Core](https://hub.docker.com/r/microsoft/windowsservercore/) page for licensing information about Windows Server Core.
-
-Please see the [Git for Windows](https://github.com/git-for-windows/git) page for licensing information about Git for Windows.
-
-Please see the [Chocolatey FAQ](https://chocolatey.org/faq) page for licennsing information about Chocolatey.
+Please see the [Git](https://git-scm.com/about/free-and-open-source) page for licensing information about Git.
  
