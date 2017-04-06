@@ -7,3 +7,5 @@ COPY install_win10sdk.ps1 /
 SHELL ["powershell"]
 RUN ./install_win10sdk.ps1
 RUN remove-item ./install_win10sdk.ps1
+RUN choco install -y cmake.install
+RUN choco install -y vcbuildtools
