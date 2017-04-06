@@ -3,6 +3,7 @@ LABEL maintainer='Travis Plunk <github@ez13.net>'
 LABEL readme.md="https://github.com/TravisEz13/docker/blob/master/microsoft/windowsservercore/git/readme.md"
 LABEL description="This Dockerfile for Windows Server Core with git installed via chocolatey.  See readme on docker hub for licensing."
 
+COPY install_win10sdk.ps1 /
 SHELL ["powershell"]
-RUN Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
-RUN choco install -y git
+RUN ./install_win10sdk.psl
+RUN remove-item ./install_win10sdk.psl
