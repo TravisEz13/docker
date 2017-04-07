@@ -4,8 +4,11 @@ LABEL readme.md="https://github.com/TravisEz13/docker/blob/master/microsoft/wind
 LABEL description="This Dockerfile for Windows Server Core with git installed via chocolatey.  See readme on docker hub for licensing."
 
 COPY install_win10sdk.ps1 /
+COPY visualcppbuildtools/ visualcppbuildtools/
 SHELL ["powershell"]
 RUN ./install_win10sdk.ps1
 RUN remove-item ./install_win10sdk.ps1
 RUN choco install -y cmake.install
-RUN choco install -y vcbuildtools
+RUN visualcppbuildtools/installvisualcppbuildtools.ps1 ; \
+    visualcppbuildtools/setvcbuildtoolsenv.ps1 ; \
+    Remove-Item visualcppbuildtools -Recurse -force
